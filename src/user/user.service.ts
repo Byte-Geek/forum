@@ -25,15 +25,19 @@ export class UserService {
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-    const token = this.jwtService.sign({ email: createUserDto.email });
+    const token = this.jwtService.sign({ 
+      email: createUserDto.email,
+      role: createUserDto.role || 'USER'
+    });
 
     return { 
       user: await this.prisma.user.create({
         data: {
           ...createUserDto,
           password: hashedPassword,
+          role: createUserDto.role || 'USER',
         },
-        select: { id: true, email: true },
+        select: { id: true, email: true, username: true, role: true },
       }), 
       token 
     };
