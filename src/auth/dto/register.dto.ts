@@ -1,13 +1,13 @@
 import { IsEmail, MinLength, IsEnum, IsOptional } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-enum Role {
+export enum Role {
   USER = 'USER',
   MODERATOR = 'MODERATOR',
   ADMIN = 'ADMIN'
 }
 
-export class CreateUserDto {
+export class RegisterDto {
   @ApiProperty({
     description: 'User email address',
     example: 'newuser@example.com',
