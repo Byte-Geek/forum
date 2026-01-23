@@ -16,3 +16,11 @@ export const Role = {
 } as const
 
 export type Role = (typeof Role)[keyof typeof Role]
+
+
+export const AchievementType = {
+  FirstPost: 'FirstPost',
+  FirstTopic: 'FirstTopic'
+} as const
+
+export type AchievementType = (typeof AchievementType)[keyof typeof AchievementType]

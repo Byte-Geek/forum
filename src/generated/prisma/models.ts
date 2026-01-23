@@ -9,4 +9,9 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Category'
+export type * from './models/Topic'
+export type * from './models/Post'
+export type * from './models/Achievement'
+export type * from './models/UserAchievement'
 export type * from './commonInputTypes'

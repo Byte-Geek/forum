@@ -14,6 +14,13 @@ enum Role {
   ADMIN
 }
 
+enum AchievementType {
+  FirstPost
+  FirstTopic
+  
+}
+
+
 model User {
   id        Int      @id @default(autoincrement())
   username  String   @unique
@@ -22,4 +29,75 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  topics Topic[]
+  posts Post[]
+  achievements UserAchievement[]
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String? @db.Text
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  topics Topic[]
+}
+
+model Topic {
+  id Int @id @default(autoincrement())
+  title String
+  content String @db.Text
+
+  categoryId Int
+  authorId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  posts Post[]
+}
+
+
+model Post {
+  id Int @id @default(autoincrement())
+  content String @db.Text
+
+  topicId Int
+  authorId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  topic Topic @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  id Int @id @default(autoincrement())
+  name String @unique
+  description String? @db.Text
+  type AchievementType
+  rule String
+
+  createdAt DateTime @default(now())
+
+  userAchievements UserAchievement[]
+}
+
+model UserAchievement {
+  id Int @id @default(autoincrement())
+
+  userId Int
+  achievementId Int
+  earnedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
 }
