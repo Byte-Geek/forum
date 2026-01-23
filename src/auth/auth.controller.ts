@@ -1,7 +1,8 @@
-import { Controller, UseGuards, Post, Request, Body, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, UseGuards, Post, Request, Body, UsePipes, ValidationPipe, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -27,6 +28,16 @@ export class AuthController {
     @ApiResponse({ status: 409, description: 'Conflict - email or username already exists' })
     async register(@Body() registerDto: RegisterDto) {
         return this.authService.register(registerDto);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Get('profile')
+    @ApiOperation({ summary: 'Get user profile' })
+    @ApiBearerAuth()
+    @ApiResponse({ status: 200, description: 'Profile retrieved successfully' })
+    @ApiResponse({ status: 401, description: 'Unauthorized' })
+    getProfile(@Request() req) {
+      return req.user;
     }
 
     
